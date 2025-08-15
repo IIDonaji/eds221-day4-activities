@@ -1,0 +1,95 @@
+---
+title: "Day 4 Task & Activities"
+format: html
+editor: visual
+---
+
+## For loops revisited
+Task 1  
+```{r}
+weekdays <- c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday")
+
+transects <- c("Transect A", "Transect B", "Transect C")
+out_matrix <- matrix(nrow = length(weekdays), ncol = length(transects))
+
+for ( i in seq_along(weekdays)) {
+  for ( j in seq_along(transects)) {
+    k <- paste0(weekdays[i], "-", transects[j])
+    out_matrix[i,j] <- k # need to refer to to [row, column. industry standers must be stored in a variable
+  }
+  
+}
+```
+## 3 Functions introduced
+Task 2
+```{r}
+force <- function(m,a) {
+   F <- m * a
+   print(paste("The resulting force is", F, "Newtons."))
+}
+ 
+force(m = 8, a = 3)
+```
+Task 3
+```{r}
+fish_parm <- data.frame(
+  common_name = c("Milkfish", "Great barracuda", "Giant trevally"),
+                          a_est = c(0.0905, 0.0181, 0.0353),
+                          b_est = c(2.52, 3.27, 3.05))
+# i need filter out where common name is = to fish name, thats a new data frame that i ask r to look for a-est and b-est.
+
+fish_weight <- function(fish_name, tot_length) {
+  
+  fish_sub <- fish_parm |> 
+    dplyr::filter(common_name == fish_name)
+  
+fish_weight <- fish_parm$a_est * (tot_length ^ fish_sub$b_est)
+
+  return(fish_weight)
+}
+# testing function
+fish_weight(fish_name = "Great barracuda", tot_length = 100)
+
+```
+
+
+```{r}
+#creating a vector of lengths
+range_length <- seq(from = 0, to = 100, by = 1)
+
+milkfish_weight <- fish_weight(fish_name = "Milkfish", tot_length = range_length)
+
+```
+4. Wave power
+```{r}
+wave_power <- function(wave_height, wave_period) {
+  0.5 *(wave_height ^ 2) * wave_period
+}
+```
+
+```{r}
+wave_heights <- seq(from = 0, to = 3, by = 0.2)
+
+wave_power(wave_height = wave_heights, wave_period = 8)
+```
+Take 5 (optional)
+```{r}
+brenville_waves <- function(wave_height, wave_period, depth) {
+  
+  if (depth > 12) {
+    message("Using the deep wave equation.")
+    bren_wave_energy <- 0.5 * (wave_height ^ 2) * wave_period
+  }
+  
+  else if (depth <= 12) {
+    message("Using the shallow wave equation.")
+    bren_wave_energy <- 0.81 * (wave_height ^ 2) * wave_period
+  }
+  
+  return(bren_wave_energy)
+}
+
+brenville_waves(wave_height = 5, wave_period = 10, depth = 4)
+```
+
+
